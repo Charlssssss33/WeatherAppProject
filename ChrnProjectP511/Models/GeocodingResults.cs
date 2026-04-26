@@ -10,6 +10,15 @@ namespace ChrnProjectP511.Models
     public class GeocodingResults
     {
         [JsonProperty("name")]
-     public string Name { get; set; }
+        public string Name { get; set; }
+        
+        [JsonProperty("latitude")]
+        public double Latitude { get; set; }
+        
+        [JsonProperty("longitude")]
+        public double Longitude { get; set; }
+        
+        [JsonProperty("country")]
+        public string Country {  get; set; }
     }
 }
