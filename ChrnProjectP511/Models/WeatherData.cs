@@ -12,7 +12,7 @@ namespace ChrnProjectP511.Models
         public string CityName { get; set; }
         public double Temperature { get; set; }
         public double WindSpeed { get; set; }
-        public int Huidity { get; set; }
+        public int Humidity { get; set; }
         public int Pressure { get; set; }
         public string WeatherCode { get; set; }
         public string WeatherDiscription { get; set; }
