@@ -24,8 +24,12 @@ namespace ChrnProjectP511.Models
                 _ => "Неизвестно"
             };
         }
-        
-
-        
+        public static string GetIcon(int code)
+        {
+            return code switch
+            {
+               
+            };
+        }
     }
 }
