@@ -28,7 +28,14 @@ namespace ChrnProjectP511.Models
         {
             return code switch
             {
-               
+               0 => "☀️",
+               1 => "🌤️ ",
+                2 => "⛅",
+                3 => "☁️ ",
+                45 => "🌫️ ",
+                61 => "🌧️ ",
+                71 => "❄️ ",
+                _ => "❓"
             };
         }
     }
