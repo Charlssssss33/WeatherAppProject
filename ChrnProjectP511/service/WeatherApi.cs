@@ -1,4 +1,5 @@
-﻿using Avalonia.Metadata;
+﻿using Avalonia.Markup.Xaml.MarkupExtensions;
+using Avalonia.Metadata;
 using ChrnProjectP511.Models;
 using Newtonsoft.Json.Linq;
 using System;
@@ -18,7 +19,7 @@ namespace ChrnProjectP511.service
         {
             try
             {
-                var coordinates = await GetCoordinatesAsync(cityName);
+                var coordinates = await GetCityCoordinatesAsync(cityName);
                 if (coordinates == null)
                 {
                     return null;
@@ -60,6 +61,36 @@ namespace ChrnProjectP511.service
                 Latitude = (double)firstResult["latitude"],
                 Longitude = (double)firstResult["longitude"],
                 Country = firstResult["country"]?.ToString() ?? ""
+            };
+        }
+        private async Task<WeatherData?> GetWeatherByCoordinatesAsync(double lat, double lon)
+        {
+            string url = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true";
+
+            string json = await _httpClient.GetStringAsync(url);
+            JObject data = JObject.Parse(json);
+
+            var currentWeather = data["current_weather"];
+            if (currentWeather == null)
+            {
+                return null;
+            }
+
+            double temperature = (double)currentWeather["temperature"];
+            double windSpeed = (double)currentWeather["windspeed"];
+            int weatherCode = (int)currentWeather["weathercode"];
+
+            return new WeatherData()
+            {
+                CityName = "",
+                Temperature = temperature,
+                WindSpeed = windSpeed,
+                Humidity = 0,
+                Pressure = 0,
+                WeatherCode = weatherCode.ToString(),
+                WeatherDiscription = WeatherCodeMapper.GetDescription(weatherCode),
+                Icon = WeatherCodeMapper.GetIcon(weatherCode),
+                LastUpdated = ""
             };
         }
     }

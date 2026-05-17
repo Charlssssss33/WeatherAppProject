@@ -18,5 +18,6 @@ namespace ChrnProjectP511.Models
         public string WeatherCode { get; set; }
         public string WeatherDiscription { get; set; }
         public string LastUpdated { get; set; }
+        public string Icon { get; set; }
     }
 }
