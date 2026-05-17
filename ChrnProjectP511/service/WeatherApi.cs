@@ -1,4 +1,5 @@
-﻿using ChrnProjectP511.Models;
+﻿using Avalonia.Metadata;
+using ChrnProjectP511.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -34,10 +35,32 @@ namespace ChrnProjectP511.service
             }
             catch (Exception ex)
             {
-                // Ошибка сети или другое исключение
+                
                 System.Diagnostics.Debug.WriteLine($"Ошибка: {ex.Message}");
                 return null;
             }
+        }
+        private async Task<CityCoordinates?> GetCityCoordinatesAsync(string cityName)
+        {
+            string url = "$https://geocoding-api.open-meteo.com/v1/search?name={cityName}&count=1\";";
+
+           string Json = await _httpClient.GetStringAsync(url);
+            
+            JObject data = JObject.Parse(Json);
+
+            var firstResult = data["results"]?[0];
+            if (firstResult == null)
+            {
+                return null;
+            }
+
+            return new CityCoordinates()
+            {
+                Name = firstResult["name"]?.ToString() ?? cityName,
+                Latitude = (double)firstResult["latitude"],
+                Longitude = (double)firstResult["longitude"],
+                Country = firstResult["country"]?.ToString() ?? ""
+            };
         }
     }
 }
