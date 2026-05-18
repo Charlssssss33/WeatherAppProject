@@ -16,184 +16,208 @@
     </Design.DataContext>
 
     
-    <Window.Styles>
-        <Style Selector="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-    </Window.Styles>
+  
 
-    <Border Background="#0f0f21">
-        <StackPanel Margin="20" Spacing="15">
-            <TextBlock Text="🌤️  Weather App" 
-                       FontSize="28" 
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto">
+        <!-- Отступ сверху -->
+        <Rectangle Grid.Row="0" Height="20"/>
+
+        <!-- Заголовок -->
+        <Border Grid.Row="1" Margin="20,0">
+            <TextBlock Text="🌦️ Weather App"
+                       FontSize="28"
                        FontWeight="Bold"
-                       Foreground="#FFFFFF"
+                       Foreground="#F8FAFC"
                        HorizontalAlignment="Center"/>
-            <Border Background="#16213E" 
-                    CornerRadius="10" 
-                    Padding="10">
-                <StackPanel Spacing="10">               
+        </Border>
+
+        <!-- Основной контент -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20" Spacing="15">
+
+                <!-- Поле ввода -->
+                <Border Background="#1E293B"
+                        CornerRadius="12"
+                        Padding="12">
                     <TextBox x:Name="CityInput"
-                             Watermark="Введите название города..."
-                             Foreground="#f5f5fa"
-                             Background="#f5f5fa"
-                             BorderThickness="0"
-                             Padding="10"
-                             FontSize="16"/>
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                        <Button x:Name="SearchButton"
-                                Content="🔍 Узнать погоду"
-                                Background="#E94560"
-                                Foreground="White"
-                                FontWeight="Bold"
-                                Padding="15,8"
-                                HorizontalAlignment="Stretch"
-                                Width="0"/>
-                        <Button x:Name="SaveDefaultButton"
-                                Content="⭐ Запомнить"
-                                Background="#533483"
-                                Foreground="White"
-                                Padding="15,8"
-                                Width="0"/>
-                    </StackPanel>
-                    <TextBlock x:Name="LoadingText"
-                               Text="⏳ Загрузка..."
-                               Foreground="#FFA500"
-                               HorizontalAlignment="Center"
-                               IsVisible="False"/>
-                    <TextBlock x:Name="ErrorText"
-                               Text=""
-                               Foreground="#E94560"
-                               HorizontalAlignment="Center"
-                               IsVisible="False"
-                               FontSize="12"/>
-                </StackPanel>
-            </Border>
-            <Border x:Name="WeatherCard"
-                    Background="#16213E"
-                    CornerRadius="15"
-                    Padding="20"
-                    IsVisible="False">
-                
-                <StackPanel Spacing="10" HorizontalAlignment="Center">
-                    
-                    <TextBlock x:Name="CityNameText"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               Foreground="#FFFFFF"
- HorizontalAlignment="Center"/>
-                    
-                   
-                    <StackPanel Orientation="Horizontal" 
-                                HorizontalAlignment="Center" 
-                                Spacing="10">
-                        <TextBlock x:Name="IconText"
-                                   FontSize="64"/>
-                        <TextBlock x:Name="TempText"
-                                   FontSize="64"
-                                   FontWeight="Bold"
-                                   Foreground="#FFFFFF"/>
-                    </StackPanel>
-
-                    <TextBlock x:Name="DescriptionText"
-                               FontSize="18"
-                               Foreground="#BBBBBB"
-                               HorizontalAlignment="Center"/>
-                    
-                   
-                    <Border Height="1" Background="#333333" Margin="0,10"/>
-                    
-                    <StackPanel Orientation="Horizontal" 
-                                HorizontalAlignment="Center" 
-                                Spacing="30">
-                        
-                        <StackPanel HorizontalAlignment="Center" Spacing="3">
-                            <TextBlock Text="💨  Ветер" 
-                                       Foreground="#888888" 
-                                       FontSize="12"
-                                       HorizontalAlignment="Center"/>
-                            <TextBlock x:Name="WindText" 
-                                       Foreground="#FFFFFF" 
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"/>
-                        </StackPanel>
-                        
-                        <StackPanel HorizontalAlignment="Center" Spacing="3">
-                            <TextBlock Text="💧  Влажность" 
-                                       Foreground="#888888" 
-                                       FontSize="12"
-                                       HorizontalAlignment="Center"/>
-                            <TextBlock x:Name="HumidityText" 
-                                       Foreground="#FFFFFF" 
-                                       FontSize="16"
-                                       HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-           
-            <Border Background="#16213E"
-                    CornerRadius="10"
-                    Padding="10">
-                <StackPanel Spacing="8">
-                    
-                    <StackPanel Orientation="Horizontal" 
-                                HorizontalAlignment="Stretch">
-                        <TextBlock Text="📜  История запросов" 
-                                   FontSize="16" 
-                                   FontWeight="Bold"
-                                   Foreground="#FFFFFF"/>
-                        <Button x:Name="ClearHistoryButton"
-                                Content="🗑️  Очистить"
-                                Background="#533483"
-                                Foreground="White"
-                                Padding="10,5"
-                                FontSize="12"
-                                HorizontalAlignment="Right"
-                                Width="0"/>
-                    </StackPanel>
-                    
-                    <Border Height="1" Background="#333333"/>
-                    
-                    <ListBox x:Name="HistoryList"
+                             Text="{Binding CityName}"
+                             Watermark="🏙️ Введите город (например, Moscow)"
+                             Foreground="#F8FAFC"
                              Background="Transparent"
                              BorderThickness="0"
-                             Height="150">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="#0F3460" 
-                                        CornerRadius="5" 
-                                        Margin="0,2" 
-                                        Padding="8">
-                                    <TextBlock Text="{Binding}" 
-                                               Foreground="#EEEEEE"
-                                               FontSize="13"/>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                             FontSize="16"/>
+                </Border>
+
+                <!-- Кнопки -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Grid.Column="0"
+                            Command="{Binding SearchWeatherCommand}"
+                            Content="🔍 Погода"
+                            Background="#3B82F6"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Padding="12"
+                            CornerRadius="10"
+                            FontSize="14"/>
                     
-                    <TextBlock x:Name="HistoryEmptyText"
-                               Text="Пока нет истории. Найдите город!"
-                               Foreground="#888888"
-                               HorizontalAlignment="Center"
-                               FontSize="12"
-                               IsVisible="True"/>
-                </StackPanel>
-            </Border>
+                    <Button Grid.Column="1"
+                            Command="{Binding SaveDefaultCityCommand}"
+                            Content="⭐ Запомнить"
+                            Background="#8B5CF6"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Padding="12"
+                            CornerRadius="10"
+                            FontSize="14"/>
+                </Grid>
 
-            
-            <Border Background="#0F3460"
-                    CornerRadius="8"
-                    Padding="10">
-                <TextBlock x:Name="DefaultCityText"
-                           Text="⭐ Город по умолчанию: не выбран"
-                           Foreground="#AAAAAA"
-                           FontSize="11"
-                           HorizontalAlignment="Center"/>
-            </Border>
+                <!-- Загрузка -->
+                <TextBlock Text="⏳ Загрузка погоды..."
+                           Foreground="#94A3B8"
+                           HorizontalAlignment="Center"
+                           IsVisible="{Binding IsLoading}"
+                           FontSize="13"/>
 
-        </StackPanel>
-    </Border>
+                <!-- Ошибка -->
+                <TextBlock Text="{Binding ErrorText}"
+                           Foreground="#EF4444"
+                           HorizontalAlignment="Center"
+                           IsVisible="{Binding IsErrorVisible}"
+                           FontSize="13"
+                           FontWeight="Bold"/>
+
+                <!-- Карточка погоды -->
+                <Border IsVisible="{Binding IsWeatherCardVisible}"
+        Background="#1E293B"
+        CornerRadius="20"
+        Padding="20">
+
+    <StackPanel Spacing="12">
+        <TextBlock Text="{Binding CityNameText}" />     
+        <TextBlock Text="{Binding IconText}" />         
+        <TextBlock Text="{Binding TempText}" />         
+        <TextBlock Text="{Binding DescriptionText}" />  
+        <TextBlock Text="{Binding WindText}" />         
+        <TextBlock Text="{Binding HumidityText}" />    
+    </StackPanel>
+</Border>
+
+                        <!-- Город -->
+                        <TextBlock Text="{Binding CityNameText}"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Foreground="#F8FAFC"
+                                   HorizontalAlignment="Center"/>
+
+                        <!-- Температура + иконка -->
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Spacing="8">
+                            <TextBlock Text="{Binding IconText}"
+                                       FontSize="56"
+                                       Foreground="#FBBF24"/>
+                            <TextBlock Text="{Binding TempText}"
+                                       FontSize="56"
+                                       FontWeight="Bold"
+                                       Foreground="#F8FAFC"/>
+                        </StackPanel>
+
+                        <!-- Описание -->
+                        <TextBlock Text="{Binding DescriptionText}"
+                                   FontSize="16"
+                                   Foreground="#94A3B8"
+                                   HorizontalAlignment="Center"/>
+
+                        <!-- Разделитель -->
+                        <Border Height="1"
+                                Background="#334155"
+                                Margin="0,5"/>
+
+                        <!-- Дополнительно -->
+                        <Grid ColumnDefinitions="*,*">
+                            <StackPanel Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        Spacing="4">
+                                <TextBlock Text="💨 Ветер"
+                                           Foreground="#64748B"
+                                           FontSize="12"/>
+                                <TextBlock Text="{Binding WindText}"
+                                           Foreground="#F8FAFC"
+                                           FontSize="16"
+                                           FontWeight="Bold"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Spacing="4">
+                                <TextBlock Text="💧 Влажность"
+                                           Foreground="#64748B"
+                                           FontSize="12"/>
+                                <TextBlock Text="{Binding HumidityText}"
+                                           Foreground="#F8FAFC"
+                                           FontSize="16"
+                                           FontWeight="Bold"/>
+                            </StackPanel>
+                        
+                   
+                </Border >
+
+                <!-- История -->
+                <Border Background="#1E293B"
+                        CornerRadius="16"
+                        Padding="15">
+
+                    <StackPanel Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="📋 История"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="#F8FAFC"/>
+                            <Button Grid.Column="1"
+                                    Command="{Binding ClearHistoryCommand}"
+                                    Content="🗑️ Очистить"
+                                    Background="#EF4444"
+                                    Foreground="White"
+                                    Padding="10,5"
+                                    CornerRadius="8"
+                                    FontSize="11"/>
+                        </Grid>
+
+                        <Border Height="1" Background="#334155"/>
+
+                        <ListBox ItemsSource="{Binding HistoryItems}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 MaxHeight="140">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#334155"
+                                            CornerRadius="8"
+                                            Margin="0,3"
+                                            Padding="10,8">
+                                        <TextBlock Text="{Binding}"
+                                                   Foreground="#E2E8F0"
+                                                   FontSize="12"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
+
+                <!-- Город по умолчанию -->
+                <Border Background="#1E293B"
+                        CornerRadius="12"
+                        Padding="12">
+                    <TextBlock Text="{Binding DefaultCityText}"
+                               Foreground="#64748B"
+                               FontSize="11"
+                               HorizontalAlignment="Center"/>
+                </Border>
+
+        
+      
+    </Grid>
 </Window>
+
