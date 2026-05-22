@@ -4,6 +4,7 @@ using ChrnProjectP511.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -12,86 +13,84 @@ using System.Threading.Tasks;
 
 namespace ChrnProjectP511.service
 {
+
     public class WeatherApi
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private static readonly HttpClient client = new HttpClient();
+
         public async Task<WeatherData?> GetWeatherByCityAsync(string cityName)
         {
             try
             {
-                var coordinates = await GetCityCoordinatesAsync(cityName);
-                if (coordinates == null)
-                {
-                    return null;
-                }
-                var weather = await GetWeatherByCoordinatesAsync(coordinates.Latitude, coordinates.Longitude);
-                if (weather == null)
-                {
-                    return null;
-                }
-                weather.CityName = coordinates.Name;
-                weather.LastUpdated = DateTime.Now.ToString("dd.MM.yyyy HH:mm");
+                string geoUrl = $"https://geocoding-api.open-meteo.com/v1/search?name={cityName}&count=1";
+                string geoJson = await client.GetStringAsync(geoUrl);
+                JObject geoData = JObject.Parse(geoJson);
 
-                return weather;
+                if (geoData["results"] == null || geoData["results"].Count() == 0)
+                {
+                    return null;
+                }
+
+                double latRaw = (double)geoData["results"][0]["latitude"];
+                double lonRaw = (double)geoData["results"][0]["longitude"];
+                string realName = (string)geoData["results"][0]["name"];
+                string lat = latRaw.ToString(CultureInfo.InvariantCulture);
+                string lon = lonRaw.ToString(CultureInfo.InvariantCulture);
+
+                System.Diagnostics.Debug.WriteLine($"Координаты: {lat}, {lon}");
+
+                string weatherUrl = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true";
+                System.Diagnostics.Debug.WriteLine($"URL: {weatherUrl}");
+
+                string weatherJson = await client.GetStringAsync(weatherUrl);
+                JObject weatherData = JObject.Parse(weatherJson);
+
+                double temp = (double)weatherData["current_weather"]["temperature"];
+                double wind = (double)weatherData["current_weather"]["windspeed"];
+                int code = (int)weatherData["current_weather"]["weathercode"];
+
+                return new WeatherData
+                {
+                    CityName = realName,
+                    Temperature = temp,
+                    WindSpeed = wind,
+                    Humidity = 50,
+                    Pressure = 1013,
+                    WeatherCode = code.ToString(),
+                    WeatherDiscription = GetDescription(code),
+                    Icon = GetIcon(code),
+                    LastUpdated = DateTime.Now.ToString("dd.MM.yyyy HH:mm")
+                };
             }
             catch (Exception ex)
             {
-                
                 System.Diagnostics.Debug.WriteLine($"Ошибка: {ex.Message}");
                 return null;
             }
         }
-        private async Task<CityCoordinates?> GetCityCoordinatesAsync(string cityName)
+
+        private string GetDescription(int code)
         {
-            string url = "$https://geocoding-api.open-meteo.com/v1/search?name={cityName}&count=1\";";
-
-           string Json = await _httpClient.GetStringAsync(url);
-            
-            JObject data = JObject.Parse(Json);
-
-            var firstResult = data["results"]?[0];
-            if (firstResult == null)
-            {
-                return null;
-            }
-
-            return new CityCoordinates()
-            {
-                Name = firstResult["name"]?.ToString() ?? cityName,
-                Latitude = (double)firstResult["latitude"],
-                Longitude = (double)firstResult["longitude"],
-                Country = firstResult["country"]?.ToString() ?? ""
-            };
+            if (code == 0) return "Ясно";
+            if (code == 1) return "Облачно";
+            if (code == 2) return "Переменная облачность";
+            if (code == 3) return "Пасмурно";
+            if (code == 45) return "Туман";
+            if (code == 61) return "Дождь";
+            if (code == 71) return "Снег";
+            return "Неизвестно";
         }
-        private async Task<WeatherData?> GetWeatherByCoordinatesAsync(double lat, double lon)
+
+        private string GetIcon(int code)
         {
-            string url = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true";
-
-            string json = await _httpClient.GetStringAsync(url);
-            JObject data = JObject.Parse(json);
-
-            var currentWeather = data["current_weather"];
-            if (currentWeather == null)
-            {
-                return null;
-            }
-
-            double temperature = (double)currentWeather["temperature"];
-            double windSpeed = (double)currentWeather["windspeed"];
-            int weatherCode = (int)currentWeather["weathercode"];
-
-            return new WeatherData()
-            {
-                CityName = "",
-                Temperature = temperature,
-                WindSpeed = windSpeed,
-                Humidity = 0,
-                Pressure = 0,
-                WeatherCode = weatherCode.ToString(),
-                WeatherDiscription = WeatherCodeMapper.GetDescription(weatherCode),
-                Icon = WeatherCodeMapper.GetIcon(weatherCode),
-                LastUpdated = ""
-            };
+            if (code == 0) return "☀️";
+            if (code == 1) return "⛅";
+            if (code == 2) return "☁️";
+            if (code == 3) return "☁️";
+            if (code == 45) return "🌫️";
+            if (code == 61) return "🌧️";
+            if (code == 71) return "❄️";
+            return "❓";
         }
     }
 }
