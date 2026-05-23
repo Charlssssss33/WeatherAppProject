@@ -15,14 +15,12 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    
-  
 
      <Grid RowDefinitions="Auto,Auto,*,Auto">
-        <!-- Отступ сверху -->
+
         <Rectangle Grid.Row="0" Height="20"/>
 
-        <!-- Заголовок -->
+
         <Border Grid.Row="1" Margin="20,0">
             <TextBlock Text="🌦️ Weather App"
                        FontSize="28"
@@ -31,11 +29,9 @@
                        HorizontalAlignment="Center"/>
         </Border>
 
-        <!-- Основной контент -->
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20" Spacing="15">
 
-                <!-- Поле ввода -->
                 <Border Background="#1E293B"
                         CornerRadius="12"
                         Padding="12">
@@ -47,7 +43,6 @@
                              FontSize="16"/>
                 </Border>
 
-                <!-- Кнопки -->
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                     <Button Grid.Column="0"
                             Command="{Binding SearchWeatherCommand}"
@@ -70,14 +65,12 @@
                             FontSize="14"/>
                 </Grid>
 
-                <!-- Загрузка -->
                 <TextBlock Text="⏳ Загрузка погоды..."
                            Foreground="#94A3B8"
                            HorizontalAlignment="Center"
                            IsVisible="{Binding IsLoading}"
                            FontSize="13"/>
 
-                <!-- Ошибка -->
                 <TextBlock Text="{Binding ErrorText}"
                            Foreground="#EF4444"
                            HorizontalAlignment="Center"
@@ -85,7 +78,6 @@
                            FontSize="13"
                            FontWeight="Bold"/>
 
-                <!-- Карточка погоды -->
                 <Border IsVisible="{Binding IsWeatherCardVisible}"
                         Background="#1E293B"
                         CornerRadius="20"
@@ -95,7 +87,7 @@
                         <TextBlock Text="{Binding CityNameText}"
                                    FontSize="22"
                                    FontWeight="Bold"
-                                   Foreground="#eb4034"
+                                   Foreground="#344ceb"
                                    HorizontalAlignment="Center"/>
 
                         <StackPanel Orientation="Horizontal"
@@ -141,29 +133,6 @@
                                            FontWeight="Bold"/>
                             </StackPanel>
                         </Grid>
-                    </StackPanel>
-                </Border>
-
-                <!-- История -->
-                <Border Background="#1E293B"
-                        CornerRadius="16"
-                        Padding="15">
-                    <StackPanel Spacing="10">
-                        <Grid ColumnDefinitions="*,Auto">
-                            <TextBlock Grid.Column="0"
-                                       Text="📋 История"
-                                       FontSize="15"
-                                       FontWeight="Bold"
-                                       Foreground="#F8FAFC"/>
-                            <Button Grid.Column="1"
-                                    Command="{Binding ClearHistoryCommand}"
-                                    Content="🗑️ Очистить"
-                                    Background="#EF4444"
-                                    Foreground="White"
-                                    Padding="10,5"
-                                    CornerRadius="8"
-                                    FontSize="11"/>
-                        </Grid>
 
                         <Border Height="1" Background="#334155"/>
 
@@ -179,7 +148,7 @@
                                             Padding="10,8">
                                         <TextBlock Text="{Binding}"
                                                    Foreground="#E2E8F0"
-                                                   FontSize="12"/>
+                                              FontSize="12"/>
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -187,7 +156,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Город по умолчанию -->
                 <Border Background="#1E293B"
                         CornerRadius="12"
                         Padding="12">
