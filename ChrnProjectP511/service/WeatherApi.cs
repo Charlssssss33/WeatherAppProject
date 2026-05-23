@@ -21,7 +21,7 @@ namespace ChrnProjectP511.service
         public async Task<WeatherData?> GetWeatherByCityAsync(string cityName)
         {
             try
-            {
+            { 
                 string geoUrl = $"https://geocoding-api.open-meteo.com/v1/search?name={cityName}&count=1";
                 string geoJson = await client.GetStringAsync(geoUrl);
                 JObject geoData = JObject.Parse(geoJson);

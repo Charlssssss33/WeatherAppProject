@@ -36,7 +36,7 @@
                         CornerRadius="12"
                         Padding="12">
                     <TextBox Text="{Binding CityName}"
-                             Watermark="🏙️ Введите город (например, Moscow)"
+                             Watermark="🏙️ Введите город"
                              Foreground="#F8FAFC"
                              Background="Transparent"
                              BorderThickness="0"
