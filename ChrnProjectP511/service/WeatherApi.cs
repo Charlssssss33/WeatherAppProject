@@ -23,7 +23,6 @@ namespace ChrnProjectP511.service
             {
                 try
                 {
-                    // Получаем координаты
                     string geoUrl = $"https://geocoding-api.open-meteo.com/v1/search?name={cityName}&count=1";
                     string geoJson = await client.GetStringAsync(geoUrl);
                     JObject geoData = JObject.Parse(geoJson);
@@ -40,7 +39,7 @@ namespace ChrnProjectP511.service
                     string lat = latRaw.ToString(CultureInfo.InvariantCulture);
                     string lon = lonRaw.ToString(CultureInfo.InvariantCulture);
 
-                    // Получаем погоду
+                    
                     string weatherUrl = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true";
                     string weatherJson = await client.GetStringAsync(weatherUrl);
                     JObject weatherData = JObject.Parse(weatherJson);
@@ -49,7 +48,7 @@ namespace ChrnProjectP511.service
                     double wind = (double)weatherData["current_weather"]["windspeed"];
                     int code = (int)weatherData["current_weather"]["weathercode"];
 
-                    // Получаем иконку ИЗ БАЗЫ ДАННЫХ
+                   
                     var iconFromDb = await _dbService.GetIconByCodeAsync(code);
 
                     string description = iconFromDb?.Description ?? "Неизвестно";
@@ -63,12 +62,12 @@ namespace ChrnProjectP511.service
                         Humidity = 50,
                         Pressure = 1013,
                         WeatherCode = code.ToString(),
-                        WeatherDescription = description,
+                        WeatherDiscription = description,
                         Icon = emoji,
                         LastUpdated = DateTime.Now.ToString("dd.MM.yyyy HH:mm")
                     };
 
-                    // Сохраняем в историю
+                  
                     await _dbService.SaveToHistoryAsync(weather);
 
                     return weather;
