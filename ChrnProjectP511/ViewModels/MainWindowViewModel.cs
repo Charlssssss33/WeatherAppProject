@@ -15,6 +15,9 @@ namespace ChrnProjectP511.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        private readonly DatabaseService _dbService = new DatabaseService();
+
+
         private readonly WeatherApi _weatherApi = new WeatherApi();
 
         [ObservableProperty]
@@ -56,7 +59,30 @@ namespace ChrnProjectP511.ViewModels
         [ObservableProperty]
         private ObservableCollection<string> _historyItems = new ObservableCollection<string>();
 
-        
+        [ObservableProperty]
+        private bool _isHistoryEmpty;
+
+        private async Task LoadHistoryFromDatabase()
+        {
+            var history = await _dbService.GetHistoryAsync();
+
+            HistoryItems.Clear();
+            foreach (var item in history)
+            {
+                string historyText = $"{item.CityName} — {item.SearchedAt:dd.MM.yyyy HH:mm} — {item.Temperature:0}°C";
+                HistoryItems.Add(historyText);
+            }
+            _isHistoryEmpty = HistoryItems.Count == 0;
+        }
+
+        [RelayCommand]
+        private async Task ClearHistory()
+        {
+            await _dbService.ClearHistoryAsync();
+            HistoryItems.Clear();
+            _isHistoryEmpty = true;
+        }
+
         [RelayCommand]
         private async Task SearchWeather()
         {
@@ -146,7 +172,7 @@ namespace ChrnProjectP511.ViewModels
         }
 
         [RelayCommand]
-        private void ClearHistory()
+        private void Clear()
         {
             HistoryItems.Clear();
         }

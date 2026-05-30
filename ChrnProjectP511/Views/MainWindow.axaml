@@ -165,6 +165,63 @@
                                HorizontalAlignment="Center"/>
                 </Border>
 
+                <Border Background="#1E293B"
+        CornerRadius="16"
+        Padding="15">
+    
+    <StackPanel Spacing="10">
+        
+        <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0"
+                       Text="📋 История поиска"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       Foreground="#F8FAFC"
+                       VerticalAlignment="Center"/>
+            
+            <Button Grid.Column="1"
+                    Command="{Binding ClearHistoryCommand}"
+                    Content="🗑️ Очистить всё"
+                    Background="#EF4444"
+                    Foreground="White"
+                    Padding="12,6"
+                    CornerRadius="8"
+                    FontSize="12"
+                    FontWeight="Bold"/>
+        </Grid>
+        
+        <Border Height="1" Background="#334155"/>
+        
+   
+        <ListBox x:Name="HistoryList"
+                 ItemsSource="{Binding HistoryItems}"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 MaxHeight="200">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="#334155"
+                            CornerRadius="8"
+                            Margin="0,4"
+                            Padding="10,8">
+                        <TextBlock Text="{Binding}"
+                                   Foreground="#E2E8F0"
+                                   FontSize="12"/>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+
+        <TextBlock Text="📭 История пуста. Найдите погоду!"
+                   Foreground="#64748B"
+                   FontSize="12"
+                   HorizontalAlignment="Center"
+                   IsVisible="{Binding IsHistoryEmpty}"/>
+        
+    </StackPanel>
+</Border>
+
             </StackPanel>
         </ScrollViewer>
     </Grid>
